@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    environment:
+     POSTGRES_USER: "bernardo"
+     POSTGRES_DB: "rocket_web_service_db"
+     POSTGRES_PASSWORD: "bernardopassword"
+     PGDATA: /var/lib/postgresql/data/pgdata
+    image: postgres:11.8
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+
+  backend:
+    restart: on-failure
+    depends_on:
+      - db
+    build: .
+    volumes:
+      - .:/usr/src/app
+    links:
+      - db
+    ports:
+      - "3001:3001"
+    command: bash -c "diesel setup && cargo watch -x run"
+
+volumes:
+  pgdata: {}

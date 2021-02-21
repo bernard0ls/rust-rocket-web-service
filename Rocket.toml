@@ -1,0 +1,6 @@
+[global]
+address = "0.0.0.0"
+port = 3001
+
+[global.databases]
+rocket_web_service_db = {url = "postgres://bernardo:bernardopassword@db/rocket_web_service_db"}
