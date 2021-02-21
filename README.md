@@ -4,7 +4,7 @@ Rust web-service built with Rocket, Diesel and Docker
 # Dependencies
 - [Rust](https://www.rust-lang.org/)
 - [Rocket](https://rocket.rs)
-- [Diesel](https://diesel.rs
+- [Diesel](https://diesel.rs)
 - [Docker](https://www.docker.com/), Windows user's may need to install a [Windows Susbsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
 # How to Use
