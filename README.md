@@ -12,8 +12,4 @@ Rust web-service built with Rocket, Diesel and Docker
 1. Run `docker-compose up`
 2. Go to localhost:3001/healtcheck/health
 
-
-
-
-
-
+If the health is OK it means everything went okay.
