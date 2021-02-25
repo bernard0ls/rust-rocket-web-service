@@ -1,16 +1,11 @@
-#![feature(decl_macro)]
 #[macro_use] extern crate rocket;
 extern crate chrono;
-#[macro_use]
-extern crate diesel;
-#[macro_use]
-extern crate rocket_contrib;
+#[macro_use] extern crate diesel;
+#[macro_use] extern crate rocket_contrib;
 extern crate serde;
 extern crate serde_json;
-#[macro_use]
-extern crate serde_derive;
+#[macro_use] extern crate serde_derive;
 
-pub mod cors;
 pub mod models;
 pub mod routes;
 pub mod schema;
@@ -31,6 +26,5 @@ fn main() {
     ])
     .mount("/healthcheck", routes![healthcheck])
     .attach(DbConn::fairing())
-    .attach(cors::CorsFairing)
     .launch();
 }

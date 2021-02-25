@@ -1,24 +1,30 @@
 use diesel::{self, prelude::*};
 
-use rocket_contrib::json::Json;
-use crate::schema::posts::dsl::*;
+use rocket_contrib::json::{JsonValue, Json};
 
 use crate::models::post::{Post, CreatePostReq};
 use crate::{DbConn};
-use crate::schema::posts;
 
 #[get("/posts/get")]
-pub fn get_posts(conn: DbConn) -> QueryResult<Json<Vec<Post>>> {
-    posts
-    .limit(5)
-    .load::<Post>(&*conn)
-    .map(|xs| Json(xs))
+pub async fn get_posts(conn: DbConn) -> Result<JsonValue, JsonValue> {
+   match Post::get_all(&conn).await {
+        Ok(posts_vec) => Ok(json!({"posts": posts_vec})),
+        Err(e) => {
+            error_!("Failed to insert post to DB, error: {}", e);
+            Err(json!({"error": "Something went wrong..."}))
+        }
+   }
 }
 
 #[post("/posts/create", data="<newpost>")]
-pub fn create_post(newpost: Json<CreatePostReq>, conn: DbConn) -> QueryResult<Json<Post>> {
-    diesel::insert_into(posts::table)
-    .values(&newpost.into_inner())
-    .get_result(&*conn)
-    .map(|x| Json(x))
+pub async fn create_post(newpost: Json<CreatePostReq>, conn: DbConn) -> Result<JsonValue, JsonValue> {
+    let new_post = newpost.into_inner();
+    match Post::insert(new_post, &conn).await {
+        Ok(_) => Ok(json!({"message": "successfully created post"})),
+        Err(e) => {
+            error_!("Failed to insert post to DB, error: {}", e);
+            Err(json!({"error": "Something went wrong..."}))
+        }
+    }
+   
 }
